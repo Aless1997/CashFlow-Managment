@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Tipologia</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            overflow-y: auto;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="text-center">Menu</h2>
+        <a href="{% url 'home' %}">Dashboard</a>
+        <a href="{% url 'lista_movimenti' %}">Lista Movimenti</a>
+        <a href="{% url 'lista_tipologia' %}">Lista Tipologia</a>
+        <a href="{% url 'lista_destinazione' %}">Lista Destinazione</a>
+        <a href="{% url 'add_movimento' %}">Aggiungi Movimento</a>
+        <a href="{% url 'add_tipologia' %}">Aggiungi Tipologia</a>
+        <a href="{% url 'add_destinazione' %}">Aggiungi Destinazione</a>
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Lista Tipologia</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome Tipologia</th>
+                    <th>Data Creazione</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tip in tipologia %}
+                <tr>
+                    <td>{{ tip.n_tipologia }}</td>
+                    <td>{{ tip.data_creazione }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

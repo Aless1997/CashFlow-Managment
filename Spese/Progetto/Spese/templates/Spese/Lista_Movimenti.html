@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Movimenti</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .search-input {
+            margin-bottom: 20px;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            overflow-y: auto;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2 class="text-center">Menu</h2>
+        <a href="{% url 'home' %}">Dashboard</a>
+        <a href="{% url 'lista_movimenti' %}">Lista Movimenti</a>
+        <a href="{% url 'lista_tipologia' %}">Lista Tipologia</a>
+        <a href="{% url 'lista_destinazione' %}">Lista Destinazione</a>
+        <a href="{% url 'add_movimento' %}">Aggiungi Movimento</a>
+        <a href="{% url 'add_tipologia' %}">Aggiungi Tipologia</a>
+        <a href="{% url 'add_destinazione' %}">Aggiungi Destinazione</a>
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Lista Movimenti</h1>
+        <input type="text" id="searchInput" class="form-control search-input" placeholder="Cerca...">
+        <button id="downloadCsv" class="btn btn-success mb-3">Scarica CSV</button>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tipologia</th>
+                    <th>Valore</th>
+                    <th>Destinazione</th>
+                    <th>Data Movimento</th>
+                    <th>Descrizione</th>
+                </tr>
+            </thead>
+            <tbody id="movimentiTable">
+                {% for mov in movimento %}
+                <tr>
+                    <td>{{ mov.tipologia }}</td>
+                    <td>{{ mov.valore }} €</td>
+                    <td>{{ mov.destinazione }}</td>
+                    <td>{{ mov.data_movimento }}</td>
+                    <td>{{ mov.descrizione }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            var searchValue = this.value.toLowerCase();
+            var rows = document.querySelectorAll('#movimentiTable tr');
+            rows.forEach(function(row) {
+                var cells = row.querySelectorAll('td');
+                var match = Array.from(cells).some(function(cell) {
+                    return cell.textContent.toLowerCase().includes(searchValue);
+                });
+                row.style.display = match ? '' : 'none';
+            });
+        });
+
+        document.getElementById('downloadCsv').addEventListener('click', function() {
+            var csv = [];
+            var rows = document.querySelectorAll('table tr');
+            rows.forEach(function(row) {
+                var cols = row.querySelectorAll('td, th');
+                var rowData = Array.from(cols).map(function(col) {
+                    return col.innerText;
+                }).join(',');
+                csv.push(rowData);
+            });
+            var csvString = csv.join('\n');
+            var blob = new Blob([csvString], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'movimenti.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    </script>
+</body>
+</html>

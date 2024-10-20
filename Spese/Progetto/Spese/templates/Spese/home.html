@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Riepilogo Spese</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .content-container {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            overflow-y: auto;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="text-center">Menu</h2>
+        <a href="{% url 'home' %}">Dashboard</a>
+        <a href="{% url 'lista_movimenti' %}">Lista Movimenti</a>
+        <a href="{% url 'lista_tipologia' %}">Lista Tipologia</a>
+        <a href="{% url 'lista_destinazione' %}">Lista Destinazione</a>
+        <a href="{% url 'add_movimento' %}">Aggiungi Movimento</a>
+        <a href="{% url 'add_tipologia' %}">Aggiungi Tipologia</a>
+        <a href="{% url 'add_destinazione' %}">Aggiungi Destinazione</a>
+    </div>
+
+    <div class="content-container">
+        <h1 class="mb-4">Benvenuto nella tua App di Gestione Spese</h1>
+        <div class="row">
+            {% for movimento in movimenti %}
+            <div class="col-md-4">
+                <div class="card" onclick="window.location.href='{% url 'dettaglio_movimento' movimento.id %}'">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movimento.tipologia }}</h5>
+                            <p class="card-text">Valore: €{{ movimento.valore }}</p>
+                            <p class="card-text">Data: {{ movimento.data_movimento }}</p>
+                            <p class="card-text">Descrizione: {{ movimento.descrizione|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Movimento</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .btn-submit {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            overflow-y: auto;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+    {% load widget_tweaks %}
+
+    <div class="sidebar">
+        <h2 class="text-center">Menu</h2>
+        <a href="{% url 'home' %}">Dashboard</a>
+        <a href="{% url 'lista_movimenti' %}">Lista Movimenti</a>
+        <a href="{% url 'lista_tipologia' %}">Lista Tipologia</a>
+        <a href="{% url 'lista_destinazione' %}">Lista Destinazione</a>
+        <a href="{% url 'add_movimento' %}">Aggiungi Movimento</a>
+        <a href="{% url 'add_tipologia' %}">Aggiungi Tipologia</a>
+        <a href="{% url 'add_destinazione' %}">Aggiungi Destinazione</a>
+    </div>
+
+
+    <div class="form-container">
+        <h2 class="text-center mb-4">Aggiungi Movimento</h2>
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.tipologia.label_tag }}
+                {{ form.tipologia|add_class:"form-control" }}
+                <div class="invalid-feedback">
+                    Per favore seleziona una tipologia.
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.valore.label_tag }}
+                {{ form.valore|add_class:"form-control" }}
+                <div class="invalid-feedback">
+                    Per favore inserisci un valore valido.
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.destinazione.label_tag }}
+                {{ form.destinazione|add_class:"form-control" }}
+                <div class="invalid-feedback">
+                    Per favore seleziona una destinazione.
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.descrizione.label_tag }}
+                {{ form.descrizione|add_class:"form-control" }}
+                <div class="invalid-feedback">
+                    Per favore inserisci una descrizione.
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.file.label_tag }}
+                {{ form.file|add_class:"form-control" }}
+            </div>
+            <button type="submit" class="btn-submit">Salva</button>
+        </form>
+    </div>
+    <script>
+        // Bootstrap form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html>
